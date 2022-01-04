@@ -52,6 +52,11 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void draw(Graphics g) {
+        if (!running) {
+            gameOver(g);
+            return;
+        }
+
         for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
             int size = i * UNIT_SIZE;
             g.drawLine(size, 0, size, SCREEN_HEIGHT);
@@ -68,6 +73,11 @@ public class GamePanel extends JPanel implements ActionListener {
             }
             g.fillRect(x[i], y[i], UNIT_SIZE, UNIT_SIZE);
         }
+
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 40));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten)) / 2, g.getFont().getSize());
     }
 
     public void move() {
@@ -93,7 +103,11 @@ public class GamePanel extends JPanel implements ActionListener {
     }
 
     public void checkApple() {
-
+        if(x[0] == appleX && y[0] == appleY){
+            bodyParts++;
+            applesEaten++;
+            newApple();
+        }
     }
 
     public void checkCollisions() {
@@ -113,8 +127,16 @@ public class GamePanel extends JPanel implements ActionListener {
 
     }
 
-    public void gameOver(Graphics g) {
+    private void gameOver(Graphics g) {
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 40));
+        FontMetrics metrics = getFontMetrics(g.getFont());
+        g.drawString("Score: " + applesEaten, (SCREEN_WIDTH - metrics.stringWidth("Score: " + applesEaten)) / 2, g.getFont().getSize());
 
+        g.setColor(Color.red);
+        g.setFont(new Font("Ink Free", Font.BOLD, 75));
+        FontMetrics metrics2 = getFontMetrics(g.getFont());
+        g.drawString("Game Over", (SCREEN_WIDTH - metrics.stringWidth("Game Over")) / 2, SCREEN_HEIGHT / 2);
     }
 
     @Override
